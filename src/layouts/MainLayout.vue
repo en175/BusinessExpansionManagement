@@ -7,7 +7,6 @@
           <img src="@/assets/gac-logo.png" alt="广仲" class="logo-img" />
           <div class="logo-text">
             <span class="logo-main">广州仲裁委员会</span>
-            <span class="logo-sub">业务拓展管理系统</span>
           </div>
         </div>
       </div>
@@ -21,14 +20,14 @@
         <el-select
           v-model="currentRole"
           size="small"
-          style="width: 148px"
+          style="width: 120px"
           @change="handleRoleChange"
         >
           <template #prefix><el-icon><Switch /></el-icon></template>
           <el-option
             v-for="(cfg, key) in roleConfig"
             :key="key"
-            :label="`${cfg.label}（${cfg.user.name}）`"
+            :label="cfg.label"
             :value="key"
           />
         </el-select>
@@ -38,22 +37,35 @@
     <div class="app-body">
       <!-- ── Sidebar ── -->
       <aside class="app-sidebar">
-        <div class="sidebar-title">业务拓展管理</div>
-        <nav class="sidebar-nav">
-          <router-link
-            v-for="item in visibleNavItems"
-            :key="item.name"
-            :to="item.path"
-            class="nav-item"
-            :class="{ 'nav-item--active': $route.name === item.name }"
-          >
-            <el-icon class="nav-icon"><component :is="item.icon" /></el-icon>
-            <span>{{ item.label }}</span>
-            <span v-if="item.name === 'pending-approval' && pendingCount > 0" class="nav-badge">
-              {{ pendingCount }}
-            </span>
-          </router-link>
-        </nav>
+        <!-- 一级导航：业务拓展管理（可展开/收起） -->
+        <div class="nav-group">
+          <div class="nav-group-header" @click="menuOpen = !menuOpen">
+            <div class="nav-group-title">
+              <el-icon class="nav-group-icon"><Briefcase /></el-icon>
+              <span>业务拓展管理</span>
+            </div>
+            <el-icon class="nav-group-arrow" :class="{ 'is-open': menuOpen }">
+              <ArrowRight />
+            </el-icon>
+          </div>
+
+          <!-- 二级导航 -->
+          <div class="nav-group-children" :class="{ 'is-open': menuOpen }">
+            <router-link
+              v-for="item in visibleNavItems"
+              :key="item.name"
+              :to="item.path"
+              class="nav-item"
+              :class="{ 'nav-item--active': $route.name === item.name }"
+            >
+              <el-icon class="nav-icon"><component :is="item.icon" /></el-icon>
+              <span>{{ item.label }}</span>
+              <span v-if="item.name === 'pending-approval' && pendingCount > 0" class="nav-badge">
+                {{ pendingCount }}
+              </span>
+            </router-link>
+          </div>
+        </div>
 
         <div class="sidebar-footer">
           <el-icon><InfoFilled /></el-icon>
@@ -74,12 +86,14 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore, roleConfig } from '@/stores/useStore.js'
 
 const router = useRouter()
 const { state, currentUser, allowedNavs, pendingRecords, setRole } = useStore()
+
+const menuOpen = ref(true)   // 默认展开
 
 const currentRole = computed({
   get: () => state.currentRole,
@@ -147,9 +161,8 @@ function handleRoleChange(role) {
   flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(59,102,245,0.18);
 }
-.logo-text { display: flex; flex-direction: column; line-height: 1.2; }
+.logo-text { display: flex; align-items: center; }
 .logo-main { font-size: 15px; font-weight: 700; color: var(--text-main); }
-.logo-sub  { font-size: 11px; color: var(--text-sub); }
 
 .header-right {
   display: flex;
@@ -192,31 +205,66 @@ function handleRoleChange(role) {
   box-shadow: var(--shadow-sidebar);
   display: flex;
   flex-direction: column;
-  padding: var(--gap-20) 0;
+  padding: var(--gap-12) 0;
   overflow-y: auto;
 }
-.sidebar-title {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-sub);
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  padding: 0 var(--gap-20) var(--gap-12);
+
+/* 一级导航组 */
+.nav-group { padding: 0 var(--gap-8); }
+
+.nav-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px var(--gap-10);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
 }
-.sidebar-nav {
+.nav-group-header:hover { background: var(--primary-soft); }
+
+.nav-group-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-8);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.nav-group-icon { font-size: 15px; color: var(--primary); }
+
+.nav-group-arrow {
+  font-size: 12px;
+  color: var(--text-sub);
+  transition: transform .2s ease;
+}
+.nav-group-arrow.is-open { transform: rotate(90deg); }
+
+/* 二级导航（展开/收起动画） */
+.nav-group-children {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 0 var(--gap-12);
+  padding: 4px 0 4px var(--gap-8);
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height .25s ease, opacity .2s ease;
+  opacity: 0;
 }
+.nav-group-children.is-open {
+  max-height: 300px;
+  opacity: 1;
+}
+
 .nav-item {
   display: flex;
   align-items: center;
   gap: var(--gap-10);
-  padding: 10px var(--gap-12);
+  padding: 9px var(--gap-12);
   border-radius: var(--radius-md);
   color: var(--text-regular);
-  font-size: 14px;
+  font-size: 13px;
   text-decoration: none;
   transition: background .15s, color .15s;
   position: relative;
@@ -232,8 +280,7 @@ function handleRoleChange(role) {
   box-shadow: 0 4px 12px rgba(59,102,245,0.25);
 }
 .nav-item--active .nav-icon { color: #fff; }
-.nav-icon { font-size: 16px; color: var(--text-sub); }
-.nav-item--active .nav-icon { color: #fff; }
+.nav-icon { font-size: 15px; color: var(--text-sub); }
 .nav-badge {
   margin-left: auto;
   min-width: 18px;
