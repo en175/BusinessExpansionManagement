@@ -1,0 +1,63 @@
+:root {
+  /* Primary */
+  --primary: #3b66f5;
+  --primary-soft: #edf2ff;
+  --primary-gradient: linear-gradient(135deg, #3b66f5, #6187fa);
+  --primary-dark: #2a50d8;
+
+  /* Status */
+  --success: #00b479;
+  --success-soft: #e6f9f3;
+  --warning: #ff9900;
+  --warning-soft: #fff7e6;
+  --danger: #f53f3f;
+  --danger-soft: #fff0f0;
+  --info: #86909c;
+  --info-soft: #f2f3f5;
+
+  /* Text */
+  --text-main: #1d2129;
+  --text-regular: #4e5969;
+  --text-sub: #86909c;
+  --text-placeholder: #c9cdd4;
+
+  /* Backgrounds */
+  --bg-page: #f0f3fa;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-solid: #ffffff;
+  --bg-sidebar: rgba(255, 255, 255, 0.95);
+
+  /* Borders */
+  --line: rgba(229, 230, 235, 0.8);
+  --line-solid: #e5e6eb;
+
+  /* Spacing */
+  --gap-4: 4px;
+  --gap-8: 8px;
+  --gap-12: 12px;
+  --gap-16: 16px;
+  --gap-20: 20px;
+  --gap-24: 24px;
+  --gap-32: 32px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 999px;
+
+  /* Shadows */
+  --shadow-soft: 0 2px 16px rgba(59, 102, 245, 0.06);
+  --shadow-card: 0 4px 24px rgba(59, 102, 245, 0.08);
+  --shadow-float: 0 8px 32px rgba(59, 102, 245, 0.12);
+  --shadow-sidebar: 2px 0 16px rgba(59, 102, 245, 0.06);
+
+  /* Glass */
+  --glass-blur: blur(16px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.7);
+
+  /* Sizes */
+  --header-h: 60px;
+  --sidebar-w: 216px;
+}

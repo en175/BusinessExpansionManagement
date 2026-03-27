@@ -1,0 +1,152 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body, #app {
+  height: 100%;
+  font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-size: 14px;
+  color: var(--text-main);
+  background: var(--bg-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Card shell */
+.card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+/* Section title with accent bar */
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-8);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: var(--gap-16);
+}
+.section-title::before {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--primary-gradient);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* Status tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.tag-pending  { background: var(--warning-soft); color: var(--warning); }
+.tag-approved { background: var(--success-soft); color: var(--success); }
+.tag-rejected { background: var(--danger-soft);  color: var(--danger); }
+.tag-draft    { background: var(--info-soft);    color: var(--info); }
+
+/* Primary button */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: var(--primary-gradient);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity .2s, transform .15s;
+}
+.btn-primary:hover { opacity: .88; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-default {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #fff;
+  color: var(--text-regular);
+  border: 1px solid var(--line-solid);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color .2s, color .2s;
+}
+.btn-default:hover { border-color: var(--primary); color: var(--primary); }
+
+.btn-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-text:hover { background: var(--primary-soft); }
+
+.btn-danger-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--danger);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .2s;
+}
+.btn-danger-text:hover { background: var(--danger-soft); }
+
+/* Form section card */
+.form-section {
+  background: var(--bg-card-solid);
+  border: 1px solid var(--line-solid);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-20) var(--gap-24);
+  margin-bottom: var(--gap-16);
+}
+
+/* Element Plus overrides */
+.el-input__wrapper,
+.el-textarea__inner {
+  border-radius: var(--radius-md) !important;
+}
+.el-select .el-input__wrapper {
+  border-radius: var(--radius-md) !important;
+}
+.el-button--primary {
+  background: var(--primary-gradient) !important;
+  border-color: transparent !important;
+}
+.el-table th.el-table__cell {
+  background: #f7f8fc !important;
+  color: var(--text-regular) !important;
+  font-weight: 600;
+}
+.el-table__row:hover > td {
+  background: #f5f7ff !important;
+}
+.el-tag {
+  border-radius: var(--radius-full) !important;
+  border: none !important;
+}
