@@ -216,27 +216,28 @@ function handleRoleChange(role) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px var(--gap-10);
+  padding: 9px var(--gap-12);
   border-radius: var(--radius-md);
   cursor: pointer;
   user-select: none;
+  background: rgba(59, 102, 245, 0.07);
   transition: background .15s;
 }
-.nav-group-header:hover { background: var(--primary-soft); }
+.nav-group-header:hover { background: rgba(59, 102, 245, 0.13); }
 
 .nav-group-title {
   display: flex;
   align-items: center;
   gap: var(--gap-8);
   font-size: 13px;
-  font-weight: 600;
-  color: var(--text-main);
+  font-weight: 700;
+  color: #1a306b;
 }
-.nav-group-icon { font-size: 15px; color: var(--primary); }
+.nav-group-icon { font-size: 15px; color: #2a50d8; }
 
 .nav-group-arrow {
-  font-size: 12px;
-  color: var(--text-sub);
+  font-size: 11px;
+  color: #2a50d8;
   transition: transform .2s ease;
 }
 .nav-group-arrow.is-open { transform: rotate(90deg); }
