@@ -32,7 +32,7 @@
         </button>
       </div>
       <el-row :gutter="16">
-        <el-col :span="6">
+        <el-col :span="5">
           <div class="filter-label">活动标题</div>
           <el-input
             v-model="filters.titleKeyword"
@@ -41,7 +41,16 @@
             :prefix-icon="Search"
           />
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
+          <div class="filter-label">开拓对象</div>
+          <el-input
+            v-model="filters.targetName"
+            placeholder="输入机构名称关键词"
+            clearable
+            :prefix-icon="Search"
+          />
+        </el-col>
+        <el-col :span="5">
           <div class="filter-label">填报人</div>
           <el-select
             v-model="filters.reporter"
@@ -53,7 +62,7 @@
             <el-option v-for="s in staffList" :key="s.id" :label="`${s.name}（${s.dept}）`" :value="s.name" />
           </el-select>
         </el-col>
-        <el-col :span="6">
+        <el-col :span="5">
           <div class="filter-label">活动时间</div>
           <el-date-picker
             v-model="filters.dateRange"
@@ -65,20 +74,20 @@
             style="width:100%"
           />
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <div class="filter-label">活动形式</div>
           <el-select v-model="filters.activityType" placeholder="全部" clearable style="width:100%">
             <el-option v-for="t in activityTypeList" :key="t" :label="t" :value="t" />
           </el-select>
         </el-col>
-        <el-col :span="3">
+      </el-row>
+      <el-row :gutter="16" style="margin-top:12px">
+        <el-col :span="4">
           <div class="filter-label">所属行业</div>
           <el-select v-model="filters.industry" placeholder="全部" clearable style="width:100%">
             <el-option v-for="ind in industryList" :key="ind" :label="ind" :value="ind" />
           </el-select>
         </el-col>
-      </el-row>
-      <el-row :gutter="16" style="margin-top:12px">
         <el-col :span="5">
           <div class="filter-label">牵头部门</div>
           <el-select v-model="filters.dept" placeholder="全部" clearable style="width:100%">
@@ -151,6 +160,18 @@
           </template>
         </el-table-column>
         <el-table-column label="活动形式" prop="activityType" width="90" />
+        <el-table-column label="规模" prop="scale" width="65" align="center">
+          <template #default="{ row }">{{ row.scale }}人</template>
+        </el-table-column>
+        <el-table-column label="开拓对象" min-width="160" show-overflow-tooltip>
+          <template #default="{ row }">
+            <div class="table-targets">
+              <span v-for="t in row.targets" :key="t.name" class="mini-target">
+                {{ t.name }}
+              </span>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column label="所属行业" width="90" show-overflow-tooltip>
           <template #default="{ row }">
             {{ [...new Set(row.targets.map(t => t.industry))].join('、') }}
@@ -298,6 +319,7 @@ const exportVisible = ref(false)
 
 const filters = ref({
   titleKeyword: '',
+  targetName: '',
   reporter: '',
   dateRange: [],
   activityType: '',
@@ -310,7 +332,7 @@ const filters = ref({
 const selectedRows = ref([])
 
 function resetFilters() {
-  filters.value = { titleKeyword: '', reporter: '', dateRange: [], activityType: '', industry: '', dept: '', supportDept: '', staffMember: '', status: '' }
+  filters.value = { titleKeyword: '', targetName: '', reporter: '', dateRange: [], activityType: '', industry: '', dept: '', supportDept: '', staffMember: '', status: '' }
   selectedRows.value = []
 }
 
@@ -322,6 +344,7 @@ const filteredRecords = computed(() => {
   const f = filters.value
   return allRecords.value.filter(r => {
     if (f.titleKeyword && !r.title.includes(f.titleKeyword)) return false
+    if (f.targetName && !r.targets.some(t => t.name.includes(f.targetName))) return false
     if (f.reporter && r.reporter !== f.reporter) return false
     if (f.dateRange && f.dateRange.length === 2) {
       if (r.dateStart < f.dateRange[0] || r.dateStart > f.dateRange[1]) return false
@@ -481,6 +504,15 @@ function doExport() {
   font-weight: 500;
 }
 .table-title:hover { text-decoration: underline; }
+.table-targets { display: flex; flex-direction: column; gap: 2px; }
+.mini-target {
+  font-size: 12px;
+  color: var(--text-regular);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
 
 /* Detail drawer */
 .detail-section { margin-bottom: var(--gap-20); padding-bottom: var(--gap-20); border-bottom: 1px solid var(--line); }
