@@ -133,38 +133,66 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="对方参与人员">
-              <div class="dynamic-list">
-                <div
-                  v-for="(person, idx) in form.otherStaff"
-                  :key="idx"
-                  class="dynamic-row"
-                >
-                  <el-input
-                    v-model="person.name"
-                    placeholder="姓名"
-                    style="width:90px;flex-shrink:0"
-                  />
-                  <el-input
-                    v-model="person.title"
-                    placeholder="职务，如：XX公司法务总监"
-                    style="flex:1"
-                  />
-                  <el-button
-                    v-if="form.otherStaff.length > 1"
-                    type="danger"
-                    link
-                    :icon="Delete"
-                    @click="removeOtherStaff(idx)"
-                  />
-                </div>
-                <button type="button" class="btn-add-row" @click="addOtherStaff">
-                  <el-icon><Plus /></el-icon> 添加人员
-                </button>
-              </div>
+            <el-form-item label="出席领导（非必填）">
+              <el-select
+                v-model="form.ourLeaders"
+                multiple
+                filterable
+                placeholder="输入姓名搜索，如有委领导出席请填写"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="s in leaderStaff"
+                  :key="s.id"
+                  :label="`${s.name}（${s.dept} · ${s.title}）`"
+                  :value="s.name"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
+        <el-form-item label="对方参与人员">
+          <div class="dynamic-list">
+            <div class="other-staff-header">
+              <span style="width:88px;flex-shrink:0">姓名</span>
+              <span style="flex:1.2">职务</span>
+              <span style="flex:1">联系方式（非必填）</span>
+              <span style="width:32px"></span>
+            </div>
+            <div
+              v-for="(person, idx) in form.otherStaff"
+              :key="idx"
+              class="dynamic-row"
+            >
+              <el-input
+                v-model="person.name"
+                placeholder="姓名"
+                style="width:88px;flex-shrink:0"
+              />
+              <el-input
+                v-model="person.title"
+                placeholder="如：XX公司法务总监"
+                style="flex:1.2"
+              />
+              <el-input
+                v-model="person.contact"
+                placeholder="手机 / 邮箱"
+                style="flex:1"
+              />
+              <el-button
+                v-if="form.otherStaff.length > 1"
+                type="danger"
+                link
+                :icon="Delete"
+                @click="removeOtherStaff(idx)"
+              />
+              <span v-else style="width:32px"></span>
+            </div>
+            <button type="button" class="btn-add-row" @click="addOtherStaff">
+              <el-icon><Plus /></el-icon> 添加人员
+            </button>
+          </div>
+        </el-form-item>
       </div>
 
       <!-- ── 开拓对象 ── -->
@@ -368,7 +396,8 @@ const emptyForm = () => ({
   activityType: '',
   scale: null,
   ourStaff: [currentUser.value.name],
-  otherStaff: [{ name: '', title: '' }],
+  ourLeaders: [],
+  otherStaff: [{ name: '', title: '', contact: '' }],
   targets: [{ name: '', taxId: '', industry: '', province: '', city: '' }],
   purpose: '',
   feedback: '',
@@ -376,6 +405,11 @@ const emptyForm = () => ({
   attachments: [],
   remarks: '',
 })
+
+// 出席领导：正职 + 副职
+const leaderStaff = computed(() =>
+  staffList.filter(s => s.role === 'head' || s.role === 'deputy')
+)
 
 const form = ref(emptyForm())
 
@@ -396,7 +430,7 @@ function getCities(province) {
 }
 
 // 动态人员
-function addOtherStaff() { form.value.otherStaff.push({ name: '', title: '' }) }
+function addOtherStaff() { form.value.otherStaff.push({ name: '', title: '', contact: '' }) }
 function removeOtherStaff(idx) { form.value.otherStaff.splice(idx, 1) }
 
 // 动态对象
@@ -467,6 +501,14 @@ function goToMyRecords() {
 /* Dynamic list */
 .dynamic-list { display: flex; flex-direction: column; gap: 8px; }
 .dynamic-row  { display: flex; align-items: center; gap: 8px; }
+.other-staff-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-sub);
+  padding: 0 2px;
+}
 .btn-add-row {
   display: inline-flex;
   align-items: center;

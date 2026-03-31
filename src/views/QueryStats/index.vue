@@ -190,9 +190,14 @@
           <div class="section-title">参与人员</div>
           <dl class="detail-grid">
             <dt>我委参与</dt> <dd>{{ detailRecord.ourStaff.join('、') }}</dd>
+            <dt v-if="detailRecord.ourLeaders?.length">出席领导</dt>
+            <dd v-if="detailRecord.ourLeaders?.length">{{ detailRecord.ourLeaders.join('、') }}</dd>
             <dt>对方参与</dt>
             <dd>
-              <div v-for="p in detailRecord.otherStaff" :key="p.name">{{ p.name }}（{{ p.title }}）</div>
+              <div v-for="p in detailRecord.otherStaff" :key="p.name" class="other-person-row">
+                <span>{{ p.name }}（{{ p.title }}）</span>
+                <span v-if="p.contact" class="contact-badge">{{ p.contact }}</span>
+              </div>
             </dd>
           </dl>
         </div>
@@ -459,6 +464,8 @@ function doExport() {
 .detail-text-block { }
 .detail-label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
 .detail-text-block p { font-size: 13px; color: var(--text-main); line-height: 1.7; }
+.other-person-row { display:flex; align-items:center; gap:8px; margin-bottom:4px; font-size:13px; }
+.contact-badge { font-size:11px; color:var(--primary); background:var(--primary-soft); padding:1px 8px; border-radius:var(--radius-full); white-space:nowrap; }
 .detail-approve-badge, .detail-reject-badge { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 10px 14px; border-radius: var(--radius-md); }
 .detail-approve-badge { background: var(--success-soft); color: var(--success); }
 .detail-reject-badge  { background: var(--danger-soft);  color: var(--danger); }

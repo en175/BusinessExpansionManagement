@@ -133,9 +133,10 @@ export const mockRecords = [
     activityType: '走访',
     scale: 6,
     ourStaff: ['余莨桢', '鲍淑婷', '许越'],
+    ourLeaders: ['余莨桢'],
     otherStaff: [
-      { name: '陈志远', title: '广发证券股份有限公司 法务总监' },
-      { name: '刘敏',   title: '广发证券股份有限公司 合规法务' },
+      { name: '陈志远', title: '广发证券股份有限公司 法务总监', contact: 'chenzyw@gf.com.cn' },
+      { name: '刘敏',   title: '广发证券股份有限公司 合规法务', contact: '' },
     ],
     targets: [
       { name: '广发证券股份有限公司', taxId: '91440000733830765D', industry: '金融', province: '广东省', city: '广州市' },
@@ -165,9 +166,10 @@ export const mockRecords = [
     activityType: '研讨会',
     scale: 45,
     ourStaff: ['余莨桢', '鲍淑婷', '李馨', '王师捷'],
+    ourLeaders: ['余莨桢', '李馨'],
     otherStaff: [
       { name: '黄建国', title: '中远海运集团 首席法律顾问' },
-      { name: '林晓云', title: '招商局港口控股 法务总监' },
+      { name: '林晓云', title: '招商局港口控股 法务总监', contact: 'linxy@cmport.com' },
       { name: '陈海峰', title: '广州港集团 法务部长' },
     ],
     targets: [
@@ -199,9 +201,10 @@ export const mockRecords = [
     activityType: '合作洽谈',
     scale: 8,
     ourStaff: ['余莨桢', '陈晨', '许越'],
+    ourLeaders: ['余莨桢'],
     otherStaff: [
-      { name: '张立威', title: '深圳前海合作区管理局 法制处处长' },
-      { name: '吴芳芳', title: '深圳前海合作区管理局 产业发展处' },
+      { name: '张立威', title: '深圳前海合作区管理局 法制处处长', contact: '13800001111' },
+      { name: '吴芳芳', title: '深圳前海合作区管理局 产业发展处', contact: '' },
     ],
     targets: [
       { name: '深圳前海合作区管理局', taxId: '914403006721261858', industry: '数字经济', province: '广东省', city: '深圳市' },
@@ -231,9 +234,10 @@ export const mockRecords = [
     activityType: '走访',
     scale: 5,
     ourStaff: ['张小建', '颜洁', '曾雪松'],
+    ourLeaders: ['张小建'],
     otherStaff: [
-      { name: '陈明远', title: '华润集团有限公司 集团法务总监' },
-      { name: '方静',   title: '华润集团有限公司 法务部高级经理' },
+      { name: '陈明远', title: '华润集团有限公司 集团法务总监', contact: 'chenmw@cr.com' },
+      { name: '方静',   title: '华润集团有限公司 法务部高级经理', contact: '' },
     ],
     targets: [
       { name: '华润集团有限公司', taxId: '91440300MA5DXXXXXXX', industry: '建设工程', province: '广东省', city: '深圳市' },

@@ -131,9 +131,14 @@
           <div class="section-title">参与人员</div>
           <dl class="detail-grid">
             <dt>我委参与</dt> <dd>{{ detailRecord.ourStaff.join('、') }}</dd>
+            <dt v-if="detailRecord.ourLeaders?.length">出席领导</dt>
+            <dd v-if="detailRecord.ourLeaders?.length">{{ detailRecord.ourLeaders.join('、') }}</dd>
             <dt>对方参与</dt>
             <dd>
-              <div v-for="p in detailRecord.otherStaff" :key="p.name">{{ p.name }}（{{ p.title }}）</div>
+              <div v-for="p in detailRecord.otherStaff" :key="p.name" class="other-person-row">
+                <span>{{ p.name }}（{{ p.title }}）</span>
+                <span v-if="p.contact" class="contact-badge">{{ p.contact }}</span>
+              </div>
             </dd>
           </dl>
         </div>
