@@ -264,7 +264,6 @@ const filterTabs = computed(() => [
   { value: 'pending',  label: '待审批', count: myRecords.value.filter(r => r.status === 'pending').length },
   { value: 'approved', label: '已通过', count: myRecords.value.filter(r => r.status === 'approved').length },
   { value: 'rejected', label: '已退回', count: myRecords.value.filter(r => r.status === 'rejected').length },
-  { value: 'draft',    label: '草稿',   count: myRecords.value.filter(r => r.status === 'draft').length },
 ])
 
 const filteredRecords = computed(() =>

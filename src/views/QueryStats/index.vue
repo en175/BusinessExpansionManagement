@@ -33,46 +33,14 @@
       </div>
       <el-row :gutter="16">
         <el-col :span="6">
-          <div class="filter-label">开拓对象名称</div>
+          <div class="filter-label">活动标题</div>
           <el-input
-            v-model="filters.targetName"
-            placeholder="输入机构名称关键词"
+            v-model="filters.titleKeyword"
+            placeholder="输入活动标题关键词"
             clearable
             :prefix-icon="Search"
           />
         </el-col>
-        <el-col :span="6">
-          <div class="filter-label">活动时间范围</div>
-          <el-date-picker
-            v-model="filters.dateRange"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            value-format="YYYY-MM-DD"
-            style="width:100%"
-          />
-        </el-col>
-        <el-col :span="4">
-          <div class="filter-label">活动形式</div>
-          <el-select v-model="filters.activityType" placeholder="全部" clearable style="width:100%">
-            <el-option v-for="t in activityTypeList" :key="t" :label="t" :value="t" />
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <div class="filter-label">所属行业</div>
-          <el-select v-model="filters.industry" placeholder="全部" clearable style="width:100%">
-            <el-option v-for="ind in industryList" :key="ind" :label="ind" :value="ind" />
-          </el-select>
-        </el-col>
-        <el-col :span="4">
-          <div class="filter-label">牵头部门</div>
-          <el-select v-model="filters.dept" placeholder="全部" clearable style="width:100%">
-            <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
-          </el-select>
-        </el-col>
-      </el-row>
-      <el-row :gutter="16" style="margin-top:12px">
         <el-col :span="6">
           <div class="filter-label">填报人</div>
           <el-select
@@ -85,12 +53,42 @@
             <el-option v-for="s in staffList" :key="s.id" :label="`${s.name}（${s.dept}）`" :value="s.name" />
           </el-select>
         </el-col>
-        <el-col :span="4">
-          <div class="filter-label">审批状态</div>
-          <el-select v-model="filters.status" placeholder="全部" clearable style="width:100%">
-            <el-option label="待审批" value="pending" />
-            <el-option label="已通过" value="approved" />
-            <el-option label="已退回" value="rejected" />
+        <el-col :span="6">
+          <div class="filter-label">活动时间</div>
+          <el-date-picker
+            v-model="filters.dateRange"
+            type="daterange"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            value-format="YYYY-MM-DD"
+            style="width:100%"
+          />
+        </el-col>
+        <el-col :span="3">
+          <div class="filter-label">活动形式</div>
+          <el-select v-model="filters.activityType" placeholder="全部" clearable style="width:100%">
+            <el-option v-for="t in activityTypeList" :key="t" :label="t" :value="t" />
+          </el-select>
+        </el-col>
+        <el-col :span="3">
+          <div class="filter-label">所属行业</div>
+          <el-select v-model="filters.industry" placeholder="全部" clearable style="width:100%">
+            <el-option v-for="ind in industryList" :key="ind" :label="ind" :value="ind" />
+          </el-select>
+        </el-col>
+      </el-row>
+      <el-row :gutter="16" style="margin-top:12px">
+        <el-col :span="5">
+          <div class="filter-label">牵头部门</div>
+          <el-select v-model="filters.dept" placeholder="全部" clearable style="width:100%">
+            <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
+          </el-select>
+        </el-col>
+        <el-col :span="5">
+          <div class="filter-label">配合部门</div>
+          <el-select v-model="filters.supportDept" placeholder="全部" clearable style="width:100%">
+            <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
           </el-select>
         </el-col>
         <el-col :span="6">
@@ -106,9 +104,11 @@
           </el-select>
         </el-col>
         <el-col :span="4">
-          <div class="filter-label">配合部门</div>
-          <el-select v-model="filters.supportDept" placeholder="全部" clearable style="width:100%">
-            <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
+          <div class="filter-label">审批状态</div>
+          <el-select v-model="filters.status" placeholder="全部" clearable style="width:100%">
+            <el-option label="待审批" value="pending" />
+            <el-option label="已通过" value="approved" />
+            <el-option label="已退回" value="rejected" />
           </el-select>
         </el-col>
         <el-col :span="4" style="display:flex;align-items:flex-end">
@@ -128,7 +128,9 @@
         style="width:100%"
         :empty-text="'暂无符合条件的记录'"
         row-key="id"
+        @selection-change="handleSelectionChange"
       >
+        <el-table-column type="selection" width="50" />
         <el-table-column label="活动标题" min-width="200">
           <template #default="{ row }">
             <el-tooltip :content="row.title" placement="top" :show-after="300">
@@ -149,25 +151,23 @@
           </template>
         </el-table-column>
         <el-table-column label="活动形式" prop="activityType" width="90" />
-        <el-table-column label="规模" prop="scale" width="65" align="center">
-          <template #default="{ row }">{{ row.scale }}人</template>
-        </el-table-column>
-        <el-table-column label="开拓对象" min-width="160" show-overflow-tooltip>
-          <template #default="{ row }">
-            <div class="table-targets">
-              <span v-for="t in row.targets" :key="t.name" class="mini-target">
-                {{ t.name }}
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="行业" width="90" show-overflow-tooltip>
+        <el-table-column label="所属行业" width="90" show-overflow-tooltip>
           <template #default="{ row }">
             {{ [...new Set(row.targets.map(t => t.industry))].join('、') }}
           </template>
         </el-table-column>
         <el-table-column label="牵头部门" prop="leadDept" width="110" show-overflow-tooltip />
-        <el-table-column label="状态" width="84">
+        <el-table-column label="配合部门" width="110" show-overflow-tooltip>
+          <template #default="{ row }">
+            {{ (row.supportDept || []).join('、') || '—' }}
+          </template>
+        </el-table-column>
+        <el-table-column label="我委参与人员" min-width="130" show-overflow-tooltip>
+          <template #default="{ row }">
+            {{ (row.ourStaff || []).join('、') }}
+          </template>
+        </el-table-column>
+        <el-table-column label="审批状态" width="84">
           <template #default="{ row }">
             <span :class="['tag', `tag-${row.status}`]">{{ statusLabel(row.status) }}</span>
           </template>
@@ -270,7 +270,7 @@
     <el-dialog v-model="exportVisible" title="导出 Excel" width="400px" align-center>
       <div class="export-info">
         <el-icon class="export-icon"><Download /></el-icon>
-        <div>即将导出 <strong>{{ filteredRecords.length }}</strong> 条记录的明细表</div>
+        <div>即将导出<strong v-if="selectedRows.length > 0">已选</strong><strong v-else>全部筛选</strong> <strong>{{ selectedRows.length > 0 ? selectedRows.length : filteredRecords.length }}</strong> 条记录的明细表</div>
         <div style="font-size:12px;color:var(--text-sub);margin-top:4px">
           包含字段：活动标题、填报人、部门、活动时间、活动形式、规模、牵头/配合部门、开拓对象、行业地区、我委/对方参与人员、活动目的、反馈建议、跟进事项、备注、状态等
         </div>
@@ -297,19 +297,21 @@ const detailRecord  = ref(null)
 const exportVisible = ref(false)
 
 const filters = ref({
-  targetName: '',
+  titleKeyword: '',
+  reporter: '',
   dateRange: [],
   activityType: '',
   industry: '',
   dept: '',
-  reporter: '',
-  status: '',
-  staffMember: '',
   supportDept: '',
+  staffMember: '',
+  status: '',
 })
+const selectedRows = ref([])
 
 function resetFilters() {
-  filters.value = { targetName: '', dateRange: [], activityType: '', industry: '', dept: '', reporter: '', status: '', staffMember: '', supportDept: '' }
+  filters.value = { titleKeyword: '', reporter: '', dateRange: [], activityType: '', industry: '', dept: '', supportDept: '', staffMember: '', status: '' }
+  selectedRows.value = []
 }
 
 // 只显示已通过的记录（查询模块仅供参考已通过审批的信息）
@@ -319,17 +321,17 @@ const allRecords = computed(() => state.records)
 const filteredRecords = computed(() => {
   const f = filters.value
   return allRecords.value.filter(r => {
-    if (f.targetName && !r.targets.some(t => t.name.includes(f.targetName))) return false
+    if (f.titleKeyword && !r.title.includes(f.titleKeyword)) return false
+    if (f.reporter && r.reporter !== f.reporter) return false
     if (f.dateRange && f.dateRange.length === 2) {
       if (r.dateStart < f.dateRange[0] || r.dateStart > f.dateRange[1]) return false
     }
     if (f.activityType && r.activityType !== f.activityType) return false
     if (f.industry && !r.targets.some(t => t.industry === f.industry)) return false
     if (f.dept && r.leadDept !== f.dept) return false
-    if (f.reporter && r.reporter !== f.reporter) return false
-    if (f.status && r.status !== f.status) return false
-    if (f.staffMember && !r.ourStaff.includes(f.staffMember)) return false
     if (f.supportDept && !(r.supportDept || []).includes(f.supportDept)) return false
+    if (f.staffMember && !r.ourStaff.includes(f.staffMember)) return false
+    if (f.status && r.status !== f.status) return false
     return true
   })
 })
@@ -356,6 +358,10 @@ function viewDetail(rec) {
   detailVisible.value = true
 }
 
+function handleSelectionChange(rows) {
+  selectedRows.value = rows
+}
+
 function exportExcel() {
   exportVisible.value = true
 }
@@ -363,8 +369,9 @@ function exportExcel() {
 function doExport() {
   exportVisible.value = false
   // Build CSV content
+  const exportData = selectedRows.value.length > 0 ? selectedRows.value : filteredRecords.value
   const headers = ['ID','活动标题','填报人','填报部门','活动时间','活动形式','活动规模(人)','牵头部门','配合部门','开拓对象','行业','省份','城市','我委参与人员','对方参与人员','活动目的及成效','反馈意见建议','后续需跟进事项','备注','状态','审批人','审批时间']
-  const rows = filteredRecords.value.map(r => [
+  const rows = exportData.map(r => [
     r.id,
     r.title,
     r.reporter,
@@ -397,7 +404,7 @@ function doExport() {
   link.download = `业务拓展活动记录_${new Date().toISOString().slice(0,10)}.csv`
   link.click()
   URL.revokeObjectURL(url)
-  ElMessage.success(`已导出 ${filteredRecords.value.length} 条记录`)
+  ElMessage.success(`已导出 ${exportData.length} 条记录`)
 }
 </script>
 
@@ -474,15 +481,6 @@ function doExport() {
   font-weight: 500;
 }
 .table-title:hover { text-decoration: underline; }
-.table-targets { display: flex; flex-direction: column; gap: 2px; }
-.mini-target {
-  font-size: 12px;
-  color: var(--text-regular);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
-}
 
 /* Detail drawer */
 .detail-section { margin-bottom: var(--gap-20); padding-bottom: var(--gap-20); border-bottom: 1px solid var(--line); }

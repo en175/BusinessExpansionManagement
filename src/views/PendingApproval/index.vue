@@ -51,13 +51,6 @@
               </span>
             </div>
 
-            <!-- 开拓对象 -->
-            <div class="approval-targets">
-              <span v-for="t in rec.targets" :key="t.name" class="target-tag">
-                {{ t.name }} · {{ t.industry }} · {{ t.city }}
-              </span>
-            </div>
-
             <!-- 活动目的摘要 -->
             <div class="approval-purpose">
               <span class="purpose-label">活动目的：</span>
@@ -68,7 +61,7 @@
           <!-- 右侧：操作 -->
           <div class="approval-actions">
             <button class="btn-text" style="margin-bottom:8px" @click="viewDetail(rec)">
-              <el-icon><View /></el-icon> 查看全文
+              <el-icon><View /></el-icon> 查看详情
             </button>
             <button class="btn-approve" @click="handleApprove(rec)">
               <el-icon><CircleCheckFilled /></el-icon> 审批通过
@@ -327,20 +320,6 @@ function doReject() {
 .meta-item strong { color: var(--text-main); font-weight: 600; }
 .meta-item em { font-style: normal; color: var(--text-sub); margin-left: 2px; }
 
-.approval-targets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: var(--gap-16);
-}
-.target-tag {
-  background: var(--primary-soft);
-  color: var(--primary);
-  font-size: 12px;
-  padding: 3px 10px;
-  border-radius: var(--radius-full);
-}
-
 .approval-purpose { font-size: 13px; color: var(--text-regular); line-height: 1.6; }
 .purpose-label    { color: var(--text-sub); }
 
@@ -383,6 +362,10 @@ function doReject() {
 .detail-label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
 .detail-text-block p { font-size: 13px; color: var(--text-main); line-height: 1.7; }
 .drawer-footer { display: flex; gap: var(--gap-12); margin-top: var(--gap-16); }
+.drawer-footer .btn-approve,
+.drawer-footer .btn-reject {
+  flex: 1;
+}
 
 /* CC dialog */
 .cc-dialog-body { display: flex; flex-direction: column; gap: var(--gap-16); }
