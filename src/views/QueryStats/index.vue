@@ -93,7 +93,25 @@
             <el-option label="已退回" value="rejected" />
           </el-select>
         </el-col>
-        <el-col :span="14" style="display:flex;align-items:flex-end">
+        <el-col :span="6">
+          <div class="filter-label">我委参与人员</div>
+          <el-select
+            v-model="filters.staffMember"
+            filterable
+            clearable
+            placeholder="输入姓名搜索"
+            style="width:100%"
+          >
+            <el-option v-for="s in staffList" :key="s.id" :label="`${s.name}（${s.dept}）`" :value="s.name" />
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <div class="filter-label">配合部门</div>
+          <el-select v-model="filters.supportDept" placeholder="全部" clearable style="width:100%">
+            <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
+          </el-select>
+        </el-col>
+        <el-col :span="4" style="display:flex;align-items:flex-end">
           <div style="margin-left:auto;display:flex;align-items:center;gap:8px">
             <span style="font-size:13px;color:var(--text-sub)">
               找到 <strong style="color:var(--primary)">{{ filteredRecords.length }}</strong> 条记录
@@ -111,9 +129,11 @@
         :empty-text="'暂无符合条件的记录'"
         row-key="id"
       >
-        <el-table-column label="活动标题" prop="title" min-width="200" show-overflow-tooltip>
+        <el-table-column label="活动标题" min-width="200">
           <template #default="{ row }">
-            <span class="table-title" @click="viewDetail(row)">{{ row.title }}</span>
+            <el-tooltip :content="row.title" placement="top" :show-after="300">
+              <span class="table-title" @click="viewDetail(row)">{{ row.title }}</span>
+            </el-tooltip>
           </template>
         </el-table-column>
         <el-table-column label="填报人" prop="reporter" width="90">
@@ -179,7 +199,7 @@
             <dt>填报人</dt>     <dd>{{ detailRecord.reporter }}（{{ detailRecord.reporterDept }}）</dd>
             <dt>我委对接人</dt> <dd>{{ detailRecord.contact }}</dd>
             <dt>牵头部门</dt>   <dd>{{ detailRecord.leadDept }}</dd>
-            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept || '—' }}</dd>
+            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept?.length ? detailRecord.supportDept.join('、') : '—' }}</dd>
             <dt>活动时间</dt>
             <dd>{{ detailRecord.dateStart }}{{ detailRecord.dateEnd !== detailRecord.dateStart ? ' 至 ' + detailRecord.dateEnd : '' }}</dd>
             <dt>活动形式</dt>   <dd>{{ detailRecord.activityType }}</dd>
@@ -247,7 +267,7 @@
         <el-icon class="export-icon"><Download /></el-icon>
         <div>即将导出 <strong>{{ filteredRecords.length }}</strong> 条记录的明细表</div>
         <div style="font-size:12px;color:var(--text-sub);margin-top:4px">
-          包含字段：活动标题、填报人、部门、活动时间、活动形式、规模、开拓对象、行业、地区、目的成效、状态等
+          包含字段：活动标题、填报人、部门、活动时间、活动形式、规模、牵头/配合部门、开拓对象、行业地区、我委/对方参与人员、活动目的、反馈建议、跟进事项、备注、状态等
         </div>
       </div>
       <template #footer>
@@ -279,10 +299,12 @@ const filters = ref({
   dept: '',
   reporter: '',
   status: '',
+  staffMember: '',
+  supportDept: '',
 })
 
 function resetFilters() {
-  filters.value = { targetName: '', dateRange: [], activityType: '', industry: '', dept: '', reporter: '', status: '' }
+  filters.value = { targetName: '', dateRange: [], activityType: '', industry: '', dept: '', reporter: '', status: '', staffMember: '', supportDept: '' }
 }
 
 // 只显示已通过的记录（查询模块仅供参考已通过审批的信息）
@@ -301,6 +323,8 @@ const filteredRecords = computed(() => {
     if (f.dept && r.leadDept !== f.dept) return false
     if (f.reporter && r.reporter !== f.reporter) return false
     if (f.status && r.status !== f.status) return false
+    if (f.staffMember && !r.ourStaff.includes(f.staffMember)) return false
+    if (f.supportDept && !(r.supportDept || []).includes(f.supportDept)) return false
     return true
   })
 })
@@ -334,7 +358,7 @@ function exportExcel() {
 function doExport() {
   exportVisible.value = false
   // Build CSV content
-  const headers = ['ID','活动标题','填报人','填报部门','活动时间','活动形式','活动规模(人)','牵头部门','开拓对象','行业','省份','城市','纳税人识别号','我委参与人员','活动目的及成效','状态','审批人','审批时间']
+  const headers = ['ID','活动标题','填报人','填报部门','活动时间','活动形式','活动规模(人)','牵头部门','配合部门','开拓对象','行业','省份','城市','我委参与人员','对方参与人员','活动目的及成效','反馈意见建议','后续需跟进事项','备注','状态','审批人','审批时间']
   const rows = filteredRecords.value.map(r => [
     r.id,
     r.title,
@@ -344,13 +368,17 @@ function doExport() {
     r.activityType,
     r.scale,
     r.leadDept,
+    (r.supportDept || []).join('；'),
     r.targets.map(t => t.name).join('；'),
     r.targets.map(t => t.industry).join('；'),
     r.targets.map(t => t.province).join('；'),
     r.targets.map(t => t.city).join('；'),
-    r.targets.map(t => t.taxId || '').join('；'),
     r.ourStaff.join('；'),
+    (r.otherStaff || []).filter(p => p.name).map(p => p.title ? `${p.name}（${p.title}）` : p.name).join('；'),
     `"${(r.purpose || '').replace(/"/g, '""')}"`,
+    `"${(r.feedback || '').replace(/"/g, '""')}"`,
+    `"${(r.followUp || '').replace(/"/g, '""')}"`,
+    `"${(r.remarks || '').replace(/"/g, '""')}"`,
     statusLabel(r.status),
     r.approver || '',
     r.approveTime || '',

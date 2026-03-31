@@ -127,7 +127,7 @@
             <dt>填报人</dt>     <dd>{{ detailRecord.reporter }}（{{ detailRecord.reporterDept }}）</dd>
             <dt>我委对接人</dt> <dd>{{ detailRecord.contact }}</dd>
             <dt>牵头部门</dt>   <dd>{{ detailRecord.leadDept }}</dd>
-            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept || '—' }}</dd>
+            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept?.length ? detailRecord.supportDept.join('、') : '—' }}</dd>
           </dl>
         </div>
 
@@ -362,7 +362,7 @@ function editRecord(rec) {
   background: var(--bg-card-solid);
   border: 1px solid var(--line-solid);
   border-radius: var(--radius-lg);
-  padding: var(--gap-16) var(--gap-20);
+  padding: var(--gap-20) var(--gap-24);
   border-left: 4px solid transparent;
   transition: box-shadow .2s;
 }
@@ -372,12 +372,12 @@ function editRecord(rec) {
 .record-card--rejected { border-left-color: var(--danger); }
 .record-card--draft    { border-left-color: var(--info); }
 
-.record-card-header { margin-bottom: var(--gap-10); }
+.record-card-header { margin-bottom: var(--gap-12); }
 .record-title-row {
   display: flex;
   align-items: center;
   gap: var(--gap-10);
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 .record-title { font-size: 15px; font-weight: 600; color: var(--text-main); flex: 1; }
 .record-meta {
@@ -392,7 +392,7 @@ function editRecord(rec) {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: var(--gap-10);
+  margin-bottom: var(--gap-16);
 }
 .target-tag {
   background: var(--primary-soft);
@@ -408,9 +408,9 @@ function editRecord(rec) {
   align-items: flex-start;
   gap: 6px;
   font-size: 13px;
-  padding: 8px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
-  margin-bottom: var(--gap-10);
+  margin-bottom: var(--gap-12);
 }
 .reject-reason  { background: var(--danger-soft);  color: var(--danger); }
 .approve-info   { background: var(--success-soft); color: var(--success); }
@@ -423,7 +423,7 @@ function editRecord(rec) {
   margin-left: 4px;
 }
 
-.record-actions { display: flex; gap: var(--gap-4); padding-top: var(--gap-8); border-top: 1px solid var(--line); }
+.record-actions { display: flex; gap: var(--gap-4); padding-top: var(--gap-12); border-top: 1px solid var(--line); }
 
 /* Detail drawer */
 .detail-section { margin-bottom: var(--gap-20); padding-bottom: var(--gap-20); border-bottom: 1px solid var(--line); }

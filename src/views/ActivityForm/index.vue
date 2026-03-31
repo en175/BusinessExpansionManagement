@@ -3,7 +3,7 @@
     <!-- Page header -->
     <div class="page-header">
       <div>
-        <h2 class="page-title">登记活动</h2>
+        <h2 class="page-title">业务拓展活动登记</h2>
         <p class="page-desc">填写本次业务拓展活动的详细信息，提交后将推送至部门正职审批。</p>
       </div>
     </div>
@@ -62,7 +62,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="配合部门">
-              <el-select v-model="form.supportDept" placeholder="请选择（可不填）" clearable style="width:100%">
+              <el-select v-model="form.supportDept" multiple placeholder="请选择（可不填，可多选）" clearable style="width:100%">
                 <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
               </el-select>
             </el-form-item>
@@ -133,66 +133,44 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="出席领导">
-              <el-select
-                v-model="form.ourLeaders"
-                multiple
-                filterable
-                placeholder="输入姓名搜索，如有委领导出席请填写"
-                style="width:100%"
-              >
-                <el-option
-                  v-for="s in leaderStaff"
-                  :key="s.id"
-                  :label="`${s.name}（${s.dept} · ${s.title}）`"
-                  :value="s.name"
-                />
-              </el-select>
+            <el-form-item label="对方参与人员">
+              <div class="dynamic-list">
+                <div
+                  v-for="(person, idx) in form.otherStaff"
+                  :key="idx"
+                  class="dynamic-row"
+                >
+                  <el-input
+                    v-model="person.name"
+                    placeholder="姓名"
+                    style="width:80px;flex-shrink:0"
+                  />
+                  <el-input
+                    v-model="person.title"
+                    placeholder="如：XX公司法务总监"
+                    style="flex:1.2"
+                  />
+                  <el-input
+                    v-model="person.contact"
+                    placeholder="手机 / 邮箱"
+                    style="flex:0.9"
+                  />
+                  <el-button
+                    v-if="form.otherStaff.length > 1"
+                    type="danger"
+                    link
+                    :icon="Delete"
+                    @click="removeOtherStaff(idx)"
+                  />
+                  <span v-else style="width:32px"></span>
+                </div>
+                <button type="button" class="btn-add-row" @click="addOtherStaff">
+                  <el-icon><Plus /></el-icon> 添加人员
+                </button>
+              </div>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="对方参与人员">
-          <div class="dynamic-list">
-            <div class="other-staff-header">
-              <span style="width:88px;flex-shrink:0">姓名</span>
-              <span style="flex:1.2">职务</span>
-              <span style="flex:1">联系方式</span>
-              <span style="width:32px"></span>
-            </div>
-            <div
-              v-for="(person, idx) in form.otherStaff"
-              :key="idx"
-              class="dynamic-row"
-            >
-              <el-input
-                v-model="person.name"
-                placeholder="姓名"
-                style="width:88px;flex-shrink:0"
-              />
-              <el-input
-                v-model="person.title"
-                placeholder="如：XX公司法务总监"
-                style="flex:1.2"
-              />
-              <el-input
-                v-model="person.contact"
-                placeholder="手机 / 邮箱"
-                style="flex:1"
-              />
-              <el-button
-                v-if="form.otherStaff.length > 1"
-                type="danger"
-                link
-                :icon="Delete"
-                @click="removeOtherStaff(idx)"
-              />
-              <span v-else style="width:32px"></span>
-            </div>
-            <button type="button" class="btn-add-row" @click="addOtherStaff">
-              <el-icon><Plus /></el-icon> 添加人员
-            </button>
-          </div>
-        </el-form-item>
       </div>
 
       <!-- ── 开拓对象 ── -->
@@ -218,7 +196,7 @@
             >删除</el-button>
           </div>
           <el-row :gutter="16">
-            <el-col :span="10">
+            <el-col :span="14">
               <el-form-item
                 :label="`名称`"
                 :prop="`targets.${idx}.name`"
@@ -227,12 +205,7 @@
                 <el-input v-model="target.name" placeholder="机构/企业全称" />
               </el-form-item>
             </el-col>
-            <el-col :span="8">
-              <el-form-item :label="`纳税人识别号`">
-                <el-input v-model="target.taxId" placeholder="统一社会信用代码（选填）" maxlength="18" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
+            <el-col :span="10">
               <el-form-item :label="`所属行业`"
                 :prop="`targets.${idx}.industry`"
                 :rules="[{ required: true, message: '请选择行业', trigger: 'change' }]"
@@ -307,7 +280,7 @@
             v-model="form.followUp"
             type="textarea"
             :rows="3"
-            placeholder="如需其他部门配合，可描述具体需求及跟进责任人"
+            placeholder="如需其他部门配合，可描述具体需求"
             maxlength="500"
             show-word-limit
           />
@@ -316,8 +289,8 @@
 
       <!-- ── 附件与备注 ── -->
       <div class="form-section">
-        <div class="section-title">佐证材料与备注</div>
-        <el-form-item label="佐证材料">
+        <div class="section-title">相关材料与备注</div>
+        <el-form-item>
           <el-upload
             v-model:file-list="form.attachments"
             action="#"
@@ -325,6 +298,8 @@
             multiple
             :limit="10"
             class="upload-area"
+            :on-preview="handleFilePreview"
+            :on-change="handleFileChange"
           >
             <template #trigger>
               <button type="button" class="btn-default">
@@ -332,7 +307,7 @@
               </button>
             </template>
             <template #tip>
-              <div class="upload-tip">可上传活动方案、活动图片、达成的合作协议等，支持 PDF / Word / Excel / 图片，单文件不超过 20MB</div>
+              <div class="upload-tip">支持 PDF / Word（DOC、DOCX）/ 图片（JPG、JPEG、PNG），单文件不超过 50MB</div>
             </template>
           </el-upload>
         </el-form-item>
@@ -351,6 +326,25 @@
         </button>
       </div>
     </el-form>
+
+    <!-- ── 文件预览弹窗 ── -->
+    <el-dialog
+      v-model="previewVisible"
+      :title="previewFile?.name"
+      :width="previewIsPdf ? '860px' : '680px'"
+      align-center
+      destroy-on-close
+    >
+      <div class="file-preview-body">
+        <img v-if="previewIsImage" :src="previewUrl" class="preview-img" />
+        <iframe v-else-if="previewIsPdf" :src="previewUrl" class="preview-pdf" />
+        <div v-else class="preview-placeholder">
+          <el-icon class="preview-file-icon"><Document /></el-icon>
+          <div class="preview-file-name">{{ previewFile?.name }}</div>
+          <div class="preview-file-tip">该文件类型不支持在线预览，请下载后查看</div>
+        </div>
+      </div>
+    </el-dialog>
 
     <!-- ── 提交成功弹窗 ── -->
     <el-dialog v-model="successVisible" title="提交成功" width="440px" align-center>
@@ -376,7 +370,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Delete, Plus, Lock, UploadFilled, Promotion, RefreshLeft, CircleCheckFilled } from '@element-plus/icons-vue'
+import { Delete, Plus, Lock, UploadFilled, Promotion, RefreshLeft, CircleCheckFilled, Document } from '@element-plus/icons-vue'
 import { useStore } from '@/stores/useStore.js'
 import { industryList, activityTypeList, regionData } from '@/data/mockData.js'
 
@@ -387,16 +381,68 @@ const formRef = ref()
 const successVisible = ref(false)
 const submittedRecord = ref(null)
 
+// 文件预览
+const previewVisible = ref(false)
+const previewFile = ref(null)
+const previewUrl = ref('')
+const previewIsImage = ref(false)
+const previewIsPdf = ref(false)
+
+const ALLOWED_EXTS = ['.pdf', '.doc', '.docx', '.jpg', '.jpeg', '.png']
+const MAX_SIZE_MB = 50
+
+function handleFileChange(file, fileList) {
+  const raw = file.raw
+  if (!raw) return
+  const ext = '.' + raw.name.split('.').pop().toLowerCase()
+  const sizeOk = raw.size / 1024 / 1024 <= MAX_SIZE_MB
+  const typeOk = ALLOWED_EXTS.includes(ext)
+  if (!typeOk) {
+    ElMessage.warning(`不支持该文件格式，请上传 PDF / Word / JPG / PNG`)
+    const idx = fileList.findIndex(f => f.uid === file.uid)
+    if (idx !== -1) fileList.splice(idx, 1)
+    return
+  }
+  if (!sizeOk) {
+    ElMessage.warning(`文件 "${raw.name}" 超过 50MB 限制`)
+    const idx = fileList.findIndex(f => f.uid === file.uid)
+    if (idx !== -1) fileList.splice(idx, 1)
+  }
+}
+
+function handleFilePreview(file) {
+  previewFile.value = file
+  const raw = file.raw
+  previewIsImage.value = false
+  previewIsPdf.value = false
+  if (!raw) { previewVisible.value = true; return }
+  if (raw.type.startsWith('image/')) {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      previewUrl.value = e.target.result
+      previewIsImage.value = true
+      previewVisible.value = true
+    }
+    reader.readAsDataURL(raw)
+  } else if (raw.type === 'application/pdf') {
+    previewUrl.value = URL.createObjectURL(raw)
+    previewIsPdf.value = true
+    previewVisible.value = true
+  } else {
+    previewUrl.value = ''
+    previewVisible.value = true
+  }
+}
+
 const emptyForm = () => ({
   title: '',
   contact: currentUser.value.name,
   leadDept: currentUser.value.dept,
-  supportDept: '',
+  supportDept: [],
   dateRange: [],
   activityType: '',
   scale: null,
   ourStaff: [currentUser.value.name],
-  ourLeaders: [],
   otherStaff: [{ name: '', title: '', contact: '' }],
   targets: [{ name: '', taxId: '', industry: '', province: '', city: '' }],
   purpose: '',
@@ -405,11 +451,6 @@ const emptyForm = () => ({
   attachments: [],
   remarks: '',
 })
-
-// 出席领导：正职 + 副职
-const leaderStaff = computed(() =>
-  staffList.filter(s => s.role === 'head' || s.role === 'deputy')
-)
 
 const form = ref(emptyForm())
 
@@ -575,6 +616,22 @@ function goToMyRecords() {
   gap: var(--gap-12);
   padding: var(--gap-16) 0 var(--gap-8);
 }
+
+/* File preview */
+.file-preview-body { min-height: 200px; display: flex; align-items: center; justify-content: center; }
+.preview-img { max-width: 100%; max-height: 500px; border-radius: var(--radius-md); }
+.preview-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--gap-12);
+  padding: var(--gap-24);
+  color: var(--text-sub);
+}
+.preview-file-icon { font-size: 56px; color: var(--primary); }
+.preview-file-name { font-size: 14px; font-weight: 600; color: var(--text-main); text-align: center; word-break: break-all; }
+.preview-file-tip { font-size: 13px; }
+.preview-pdf { width: 100%; height: 520px; border: none; border-radius: var(--radius-md); }
 
 /* Success dialog */
 .success-body {

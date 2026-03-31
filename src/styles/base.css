@@ -126,14 +126,21 @@ html, body, #app {
   margin-bottom: var(--gap-16);
 }
 
-/* Element Plus overrides */
+/* Element Plus — override border-radius CSS variables (root level, cleanest approach) */
+:root {
+  --el-border-radius-base: 10px;
+  --el-border-radius-small: 8px;
+  --el-input-border-radius: 10px;
+}
+/* Selector-level fallbacks for components that bypass variables */
 .el-input__wrapper,
-.el-textarea__inner {
-  border-radius: var(--radius-md) !important;
+.el-textarea__inner,
+.el-range-editor.el-input__wrapper,
+.el-input-number,
+.el-input-number .el-input__wrapper {
+  border-radius: 10px !important;
 }
-.el-select .el-input__wrapper {
-  border-radius: var(--radius-md) !important;
-}
+.el-input-number { overflow: hidden; }
 .el-button--primary {
   background: var(--primary-gradient) !important;
   border-color: transparent !important;

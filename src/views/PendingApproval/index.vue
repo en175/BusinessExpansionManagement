@@ -81,37 +81,6 @@
       </div>
     </div>
 
-    <!-- 已处理记录（折叠） -->
-    <div class="processed-section">
-      <div class="processed-header" @click="showProcessed = !showProcessed">
-        <span>已处理记录（{{ processedRecords.length }}）</span>
-        <el-icon>
-          <component :is="showProcessed ? 'ArrowUp' : 'ArrowDown'" />
-        </el-icon>
-      </div>
-      <div v-if="showProcessed" class="processed-list">
-        <el-table :data="processedRecords" size="small" style="width:100%">
-          <el-table-column label="活动标题" prop="title" min-width="200" />
-          <el-table-column label="填报人" prop="reporter" width="90" />
-          <el-table-column label="部门" prop="reporterDept" width="120" />
-          <el-table-column label="活动形式" prop="activityType" width="90" />
-          <el-table-column label="状态" width="90">
-            <template #default="{ row }">
-              <span :class="['tag', `tag-${row.status}`]">{{ statusLabel(row.status) }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="处理时间" prop="approveTime" width="140" />
-          <el-table-column label="操作" width="80">
-            <template #default="{ row }">
-              <button class="btn-text" @click="viewDetail(row)">
-                <el-icon><View /></el-icon>
-              </button>
-            </template>
-          </el-table-column>
-        </el-table>
-      </div>
-    </div>
-
     <!-- 详情抽屉（复用） -->
     <el-drawer v-model="detailVisible" :title="detailRecord?.title" size="600px" direction="rtl">
       <template v-if="detailRecord">
@@ -120,7 +89,7 @@
             <dt>填报人</dt>     <dd>{{ detailRecord.reporter }}（{{ detailRecord.reporterDept }}）</dd>
             <dt>我委对接人</dt> <dd>{{ detailRecord.contact }}</dd>
             <dt>牵头部门</dt>   <dd>{{ detailRecord.leadDept }}</dd>
-            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept || '—' }}</dd>
+            <dt>配合部门</dt>   <dd>{{ detailRecord.supportDept?.length ? detailRecord.supportDept.join('、') : '—' }}</dd>
             <dt>活动时间</dt>
             <dd>{{ detailRecord.dateStart }}{{ detailRecord.dateEnd !== detailRecord.dateStart ? ' 至 ' + detailRecord.dateEnd : '' }}</dd>
             <dt>活动形式</dt>   <dd>{{ detailRecord.activityType }}</dd>
@@ -203,27 +172,15 @@
 import { ref, computed } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useStore } from '@/stores/useStore.js'
-import { UserFilled, Calendar, Collection, Timer, View, CircleCheckFilled, CircleCloseFilled, ArrowUp, ArrowDown } from '@element-plus/icons-vue'
+import { UserFilled, Calendar, Collection, Timer, View, CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue'
 
-const { pendingRecords, state, currentUser, approveRecord, rejectRecord } = useStore()
+const { pendingRecords, approveRecord, rejectRecord } = useStore()
 
-const showProcessed = ref(false)
 const detailVisible = ref(false)
 const detailRecord  = ref(null)
 const rejectVisible = ref(false)
 const rejectTarget  = ref(null)
 const rejectReason  = ref('')
-
-// 已处理（我审批过的）
-const processedRecords = computed(() =>
-  state.records.filter(r =>
-    (r.status === 'approved' || r.status === 'rejected') &&
-    r.approver === currentUser.value.name
-  )
-)
-
-const statusMap = { approved: '已通过', rejected: '已退回', pending: '待审批', draft: '草稿' }
-const statusLabel = (s) => statusMap[s] || s
 
 function truncate(str, n) {
   return str && str.length > n ? str.slice(0, n) + '…' : str
@@ -281,13 +238,13 @@ function doReject() {
 .empty-sub   { font-size: 13px; color: var(--text-sub); margin-top: 6px; }
 
 /* Approval cards */
-.approval-list { display: flex; flex-direction: column; gap: var(--gap-12); margin-bottom: var(--gap-24); }
+.approval-list { display: flex; flex-direction: column; gap: var(--gap-16); }
 .approval-card {
   background: var(--bg-card-solid);
   border: 1px solid var(--line-solid);
   border-left: 4px solid var(--warning);
   border-radius: var(--radius-lg);
-  padding: var(--gap-20);
+  padding: var(--gap-24);
   transition: box-shadow .2s;
 }
 .approval-card:hover { box-shadow: var(--shadow-card); }
@@ -306,7 +263,7 @@ function doReject() {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: var(--gap-10);
+  margin-bottom: 14px;
   font-size: 12px;
   color: var(--text-sub);
 }
@@ -318,7 +275,7 @@ function doReject() {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-bottom: var(--gap-10);
+  margin-bottom: var(--gap-16);
 }
 .target-tag {
   background: var(--primary-soft);
@@ -356,29 +313,6 @@ function doReject() {
 .btn-approve:hover { opacity: .85; }
 .btn-reject { background: var(--danger-soft); color: var(--danger); border: 1px solid #ffc5c5; }
 .btn-reject:hover { background: var(--danger); color: #fff; }
-
-/* Processed section */
-.processed-section {
-  margin-top: var(--gap-8);
-  background: var(--bg-card-solid);
-  border: 1px solid var(--line-solid);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-}
-.processed-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--gap-12) var(--gap-20);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-regular);
-  cursor: pointer;
-  user-select: none;
-  transition: background .15s;
-}
-.processed-header:hover { background: var(--primary-soft); }
-.processed-list { padding: 0 var(--gap-16) var(--gap-16); }
 
 /* Detail drawer */
 .detail-section { margin-bottom: var(--gap-20); padding-bottom: var(--gap-20); border-bottom: 1px solid var(--line); }

@@ -67,10 +67,6 @@
           </div>
         </div>
 
-        <div class="sidebar-footer">
-          <el-icon><InfoFilled /></el-icon>
-          <span>Demo 演示版本</span>
-        </div>
       </aside>
 
       <!-- ── Content ── -->
@@ -103,10 +99,10 @@ const currentRole = computed({
 const pendingCount = computed(() => pendingRecords.value.length)
 
 const allNavItems = [
-  { name: 'register',         path: '/register',         label: '登记活动',   icon: 'EditPen' },
-  { name: 'my-records',       path: '/my-records',       label: '我的记录',   icon: 'Document' },
-  { name: 'pending-approval', path: '/pending-approval', label: '待我审批',   icon: 'Bell' },
-  { name: 'query-stats',      path: '/query-stats',      label: '查询与统计', icon: 'Search' },
+  { name: 'register',         path: '/register',         label: '业务拓展活动登记', icon: 'Promotion' },
+  { name: 'my-records',       path: '/my-records',       label: '我的记录',         icon: 'Tickets' },
+  { name: 'pending-approval', path: '/pending-approval', label: '待我审批',         icon: 'Finished' },
+  { name: 'query-stats',      path: '/query-stats',      label: '查询与统计',       icon: 'DataAnalysis' },
 ]
 
 const visibleNavItems = computed(() =>
@@ -246,23 +242,23 @@ function handleRoleChange(role) {
 .nav-group-children {
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 4px 0 4px var(--gap-8);
+  gap: 6px;
+  padding: 8px 0 6px var(--gap-8);
   overflow: hidden;
   max-height: 0;
   transition: max-height .25s ease, opacity .2s ease;
   opacity: 0;
 }
 .nav-group-children.is-open {
-  max-height: 300px;
+  max-height: 400px;
   opacity: 1;
 }
 
 .nav-item {
   display: flex;
   align-items: center;
-  gap: var(--gap-10);
-  padding: 9px var(--gap-12);
+  gap: var(--gap-12);
+  padding: 11px var(--gap-12);
   border-radius: var(--radius-md);
   color: var(--text-regular);
   font-size: 13px;
@@ -281,7 +277,7 @@ function handleRoleChange(role) {
   box-shadow: 0 4px 12px rgba(59,102,245,0.25);
 }
 .nav-item--active .nav-icon { color: #fff; }
-.nav-icon { font-size: 15px; color: var(--text-sub); }
+.nav-icon { font-size: 17px; color: var(--text-sub); }
 .nav-badge {
   margin-left: auto;
   min-width: 18px;
