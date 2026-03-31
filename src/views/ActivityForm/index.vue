@@ -61,7 +61,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="配合部门（非必填）">
+            <el-form-item label="配合部门">
               <el-select v-model="form.supportDept" placeholder="请选择（可不填）" clearable style="width:100%">
                 <el-option v-for="d in deptList" :key="d.id" :label="d.name" :value="d.name" />
               </el-select>
@@ -133,7 +133,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="出席领导（非必填）">
+            <el-form-item label="出席领导">
               <el-select
                 v-model="form.ourLeaders"
                 multiple
@@ -156,7 +156,7 @@
             <div class="other-staff-header">
               <span style="width:88px;flex-shrink:0">姓名</span>
               <span style="flex:1.2">职务</span>
-              <span style="flex:1">联系方式（非必填）</span>
+              <span style="flex:1">联系方式</span>
               <span style="width:32px"></span>
             </div>
             <div
@@ -292,7 +292,7 @@
             show-word-limit
           />
         </el-form-item>
-        <el-form-item label="反馈意见建议（非必填）">
+        <el-form-item label="反馈意见建议">
           <el-input
             v-model="form.feedback"
             type="textarea"
@@ -302,7 +302,7 @@
             show-word-limit
           />
         </el-form-item>
-        <el-form-item label="后续需跟进事项（非必填）">
+        <el-form-item label="后续需跟进事项">
           <el-input
             v-model="form.followUp"
             type="textarea"
@@ -317,7 +317,7 @@
       <!-- ── 附件与备注 ── -->
       <div class="form-section">
         <div class="section-title">佐证材料与备注</div>
-        <el-form-item label="佐证材料（非必填）">
+        <el-form-item label="佐证材料">
           <el-upload
             v-model:file-list="form.attachments"
             action="#"
@@ -336,7 +336,7 @@
             </template>
           </el-upload>
         </el-form-item>
-        <el-form-item label="备注（非必填）">
+        <el-form-item label="备注">
           <el-input v-model="form.remarks" type="textarea" :rows="2" placeholder="其他需要说明的内容" maxlength="200" show-word-limit />
         </el-form-item>
       </div>
