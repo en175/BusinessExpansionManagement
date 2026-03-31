@@ -148,7 +148,7 @@
     </el-drawer>
 
     <!-- 抄送确认弹窗 -->
-    <el-dialog v-model="ccVisible" title="审批通过 · 确认抄送" width="480px" align-center>
+    <el-dialog v-model="ccVisible" title="审批并抄送" width="480px" align-center>
       <div class="cc-dialog-body">
         <div class="cc-auto-tip">
           <el-icon style="color:var(--success)"><CircleCheckFilled /></el-icon>
