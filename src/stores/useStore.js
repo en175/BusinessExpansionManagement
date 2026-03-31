@@ -86,8 +86,8 @@ export function useStore() {
     return newRecord
   }
 
-  // 审批通过
-  function approveRecord(id) {
+  // 审批通过（ccList 为手动额外抄送人员，自动抄送战略发展部正职余莨桢）
+  function approveRecord(id, ccList = []) {
     const rec = state.records.find(r => r.id === id)
     if (!rec) return
     const now = new Date()
@@ -96,6 +96,9 @@ export function useStore() {
     rec.approverDept = currentUser.value.dept
     rec.approveTime = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`
     rec.rejectReason = ''
+    // 合并自动抄送（余莨桢）与手动选择的人员，去重
+    const autoCc = ['余莨桢']
+    rec.ccList = [...new Set([...autoCc, ...ccList])]
   }
 
   // 退回

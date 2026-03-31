@@ -77,8 +77,14 @@
         <!-- 审批信息 -->
         <div v-if="rec.status === 'approved'" class="approve-info">
           <el-icon><CircleCheckFilled /></el-icon>
-          <span>{{ rec.approveTime }} 由 <strong>{{ rec.approver }}</strong> 审批通过</span>
-          <span v-if="rec._autoApproved" class="auto-tag">自动通过</span>
+          <div>
+            <div>{{ rec.approveTime }} 由 <strong>{{ rec.approver }}</strong> 审批通过
+              <span v-if="rec._autoApproved" class="auto-tag">自动通过</span>
+            </div>
+            <div v-if="rec.ccList?.length" style="font-size:12px;margin-top:2px;opacity:0.85">
+              已抄送：{{ rec.ccList.join('、') }}
+            </div>
+          </div>
         </div>
 
         <!-- 操作 -->
@@ -193,7 +199,12 @@
         <div v-if="detailRecord.status === 'approved'" class="detail-section">
           <div class="detail-approve-badge">
             <el-icon><CircleCheckFilled /></el-icon>
-            <span>{{ detailRecord.approveTime }} 由 <strong>{{ detailRecord.approver }}</strong> 审批通过，已抄送战略发展部</span>
+            <div>
+              <div>{{ detailRecord.approveTime }} 由 <strong>{{ detailRecord.approver }}</strong> 审批通过</div>
+              <div v-if="detailRecord.ccList?.length" style="margin-top:4px;font-size:12px;opacity:0.85">
+                已抄送：{{ detailRecord.ccList.join('、') }}
+              </div>
+            </div>
           </div>
         </div>
         <div v-if="detailRecord.status === 'rejected'" class="detail-section">

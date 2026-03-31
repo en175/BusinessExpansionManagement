@@ -147,6 +147,35 @@
       </template>
     </el-drawer>
 
+    <!-- 抄送确认弹窗 -->
+    <el-dialog v-model="ccVisible" title="审批通过 · 确认抄送" width="480px" align-center>
+      <div class="cc-dialog-body">
+        <div class="cc-auto-tip">
+          <el-icon style="color:var(--success)"><CircleCheckFilled /></el-icon>
+          <span>审批通过后将自动抄送 <strong>余莨桢</strong>（战略发展部正职）</span>
+        </div>
+        <div class="cc-manual-label">是否额外抄送本部门其他成员？（可不选）</div>
+        <el-select
+          v-model="ccSelected"
+          multiple
+          filterable
+          placeholder="输入姓名搜索并选择"
+          style="width:100%"
+        >
+          <el-option
+            v-for="s in ccDeptStaff"
+            :key="s.id"
+            :label="`${s.name}（${s.title}）`"
+            :value="s.name"
+          />
+        </el-select>
+      </div>
+      <template #footer>
+        <el-button type="primary" @click="doApprove">确认审批通过</el-button>
+        <el-button @click="ccVisible = false">取消</el-button>
+      </template>
+    </el-dialog>
+
     <!-- 退回对话框 -->
     <el-dialog v-model="rejectVisible" title="退回修改" width="480px" align-center>
       <div style="margin-bottom:8px;color:var(--text-regular);font-size:13px">
@@ -174,13 +203,27 @@ import { ElMessage } from 'element-plus'
 import { useStore } from '@/stores/useStore.js'
 import { UserFilled, Calendar, Collection, Timer, View, CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue'
 
-const { pendingRecords, approveRecord, rejectRecord } = useStore()
+const { pendingRecords, currentUser, staffList, approveRecord, rejectRecord } = useStore()
 
 const detailVisible = ref(false)
 const detailRecord  = ref(null)
 const rejectVisible = ref(false)
 const rejectTarget  = ref(null)
 const rejectReason  = ref('')
+
+// CC 弹窗状态
+const ccVisible  = ref(false)
+const ccTarget   = ref(null)
+const ccSelected = ref([])
+
+// 可选抄送人：当前用户所在部门，排除余莨桢（已自动抄送）和当前用户自身
+const ccDeptStaff = computed(() =>
+  staffList.filter(s =>
+    s.dept === currentUser.value.dept &&
+    s.name !== '余莨桢' &&
+    s.name !== currentUser.value.name
+  )
+)
 
 function truncate(str, n) {
   return str && str.length > n ? str.slice(0, n) + '…' : str
@@ -191,9 +234,22 @@ function viewDetail(rec) {
   detailVisible.value = true
 }
 
+// 点击"审批通过"→打开 CC 弹窗，预选副职
 function handleApprove(rec) {
-  approveRecord(rec.id)
-  ElMessage.success(`「${rec.title}」已审批通过，已自动抄送战略发展部`)
+  ccTarget.value = rec
+  ccSelected.value = ccDeptStaff.value
+    .filter(s => s.role === 'deputy')
+    .map(s => s.name)
+  ccVisible.value = true
+}
+
+// CC 弹窗确认后执行审批
+function doApprove() {
+  approveRecord(ccTarget.value.id, ccSelected.value)
+  ccVisible.value = false
+  const ccNames = ['余莨桢', ...ccSelected.value].join('、')
+  ElMessage.success(`「${ccTarget.value.title}」已审批通过，已抄送：${ccNames}`)
+  if (detailVisible.value) detailVisible.value = false
 }
 
 function openRejectDialog(rec) {
@@ -327,4 +383,18 @@ function doReject() {
 .detail-label { font-size: 12px; color: var(--text-sub); margin-bottom: 4px; }
 .detail-text-block p { font-size: 13px; color: var(--text-main); line-height: 1.7; }
 .drawer-footer { display: flex; gap: var(--gap-12); margin-top: var(--gap-16); }
+
+/* CC dialog */
+.cc-dialog-body { display: flex; flex-direction: column; gap: var(--gap-16); }
+.cc-auto-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--success-soft);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: 13px;
+  color: var(--text-regular);
+}
+.cc-manual-label { font-size: 13px; color: var(--text-sub); margin-bottom: -4px; }
 </style>

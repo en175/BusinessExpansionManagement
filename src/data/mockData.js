@@ -152,6 +152,7 @@ export const mockRecords = [
     approver: '余莨桢',
     approverDept: '战略发展部',
     rejectReason: '',
+    ccList: ['余莨桢', '陈晨', '刘洋'],
   },
   {
     id: 2,
@@ -253,6 +254,7 @@ export const mockRecords = [
     approver: '张小建',
     approverDept: '案件管理一部',
     rejectReason: '',
+    ccList: ['余莨桢', '颜洁', '曾雪松'],
   },
   {
     id: 5,
@@ -321,6 +323,7 @@ export const mockRecords = [
     approver: '余莨桢',
     approverDept: '战略发展部',
     rejectReason: '',
+    ccList: ['余莨桢', '陈晨'],
     _autoApproved: true,
   },
   {
@@ -354,6 +357,7 @@ export const mockRecords = [
     approver: '余莨桢',
     approverDept: '战略发展部',
     rejectReason: '',
+    ccList: ['余莨桢', '刘洋'],
     _autoApproved: true,
   },
 ]

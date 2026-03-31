@@ -249,7 +249,12 @@
         <div v-if="detailRecord.status === 'approved'" class="detail-section">
           <div class="detail-approve-badge">
             <el-icon><CircleCheckFilled /></el-icon>
-            <span>{{ detailRecord.approveTime }} 由 <strong>{{ detailRecord.approver }}</strong> 审批通过，已抄送战略发展部</span>
+            <div>
+              <div>{{ detailRecord.approveTime }} 由 <strong>{{ detailRecord.approver }}</strong> 审批通过</div>
+              <div v-if="detailRecord.ccList?.length" style="margin-top:4px;font-size:12px;opacity:0.85">
+                已抄送：{{ detailRecord.ccList.join('、') }}
+              </div>
+            </div>
           </div>
         </div>
         <div v-if="detailRecord.status === 'rejected'" class="detail-section">
