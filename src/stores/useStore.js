@@ -10,7 +10,7 @@ export const roleConfig = {
   },
   '部门正职': {
     label: '部门正职',
-    user: { name: '余莨桢', dept: '战略发展部', isHead: true, isStrategyStaff: true },
+    user: { name: '余蕊桢', dept: '战略发展部', isHead: true, isStrategyStaff: true },
     navs: ['register', 'my-records', 'pending-approval', 'query-stats'],
   },
   '战略发展部专员': {
@@ -86,7 +86,7 @@ export function useStore() {
     return newRecord
   }
 
-  // 审批通过（ccList 为手动额外抄送人员，自动抄送战略发展部正职余莨桢）
+  // 审批通过（ccList 为手动额外抄送人员，自动抄送战略发展部正职余蕊桢）
   function approveRecord(id, ccList = []) {
     const rec = state.records.find(r => r.id === id)
     if (!rec) return
@@ -96,8 +96,8 @@ export function useStore() {
     rec.approverDept = currentUser.value.dept
     rec.approveTime = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`
     rec.rejectReason = ''
-    // 合并自动抄送（余莨桢）与手动选择的人员，去重
-    const autoCc = ['余莨桢']
+    // 合并自动抄送（余蕊桢）与手动选择的人员，去重
+    const autoCc = ['余蕊桢']
     rec.ccList = [...new Set([...autoCc, ...ccList])]
   }
 

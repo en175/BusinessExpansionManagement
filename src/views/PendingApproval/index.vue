@@ -145,7 +145,7 @@
       <div class="cc-dialog-body">
         <div class="cc-auto-tip">
           <el-icon style="color:var(--success)"><CircleCheckFilled /></el-icon>
-          <span>审批通过后将自动抄送 <strong>余莨桢</strong>（战略发展部正职）</span>
+          <span>审批通过后将自动抄送 <strong>余蕊桢</strong>（战略发展部正职）</span>
         </div>
         <div class="cc-manual-label">是否额外抄送本部门其他成员？（可不选）</div>
         <el-select
@@ -209,11 +209,11 @@ const ccVisible  = ref(false)
 const ccTarget   = ref(null)
 const ccSelected = ref([])
 
-// 可选抄送人：当前用户所在部门，排除余莨桢（已自动抄送）和当前用户自身
+// 可选抄送人：当前用户所在部门，排除余蕊桢（已自动抄送）和当前用户自身
 const ccDeptStaff = computed(() =>
   staffList.filter(s =>
     s.dept === currentUser.value.dept &&
-    s.name !== '余莨桢' &&
+    s.name !== '余蕊桢' &&
     s.name !== currentUser.value.name
   )
 )
@@ -240,7 +240,7 @@ function handleApprove(rec) {
 function doApprove() {
   approveRecord(ccTarget.value.id, ccSelected.value)
   ccVisible.value = false
-  const ccNames = ['余莨桢', ...ccSelected.value].join('、')
+  const ccNames = ['余蕊桢', ...ccSelected.value].join('、')
   ElMessage.success(`「${ccTarget.value.title}」已审批通过，已抄送：${ccNames}`)
   if (detailVisible.value) detailVisible.value = false
 }
