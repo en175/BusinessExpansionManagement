@@ -444,7 +444,7 @@ const emptyForm = () => ({
   scale: null,
   ourStaff: [currentUser.value.name],
   otherStaff: [{ name: '', title: '', contact: '' }],
-  targets: [{ name: '', taxId: '', industry: '', province: '', city: '' }],
+  targets: [{ name: '', industry: '', province: '', city: '' }],
   purpose: '',
   feedback: '',
   followUp: '',
@@ -475,7 +475,7 @@ function addOtherStaff() { form.value.otherStaff.push({ name: '', title: '', con
 function removeOtherStaff(idx) { form.value.otherStaff.splice(idx, 1) }
 
 // 动态对象
-function addTarget() { form.value.targets.push({ name: '', taxId: '', industry: '', province: '', city: '' }) }
+function addTarget() { form.value.targets.push({ name: '', industry: '', province: '', city: '' }) }
 function removeTarget(idx) { form.value.targets.splice(idx, 1) }
 
 // 审批人名称（展示用）

@@ -111,14 +111,7 @@ export function useStore() {
     rec.rejectReason = reason
   }
 
-  // 撤回（填报人撤回待审批记录）
-  function withdrawRecord(id) {
-    const rec = state.records.find(r => r.id === id)
-    if (!rec || rec.status !== 'pending') return
-    rec.status = 'draft'
-  }
-
-  // 重新提交（草稿/退回 → 待审批）
+  // 重新提交（退回 → 待审批）
   function resubmitRecord(id, formData) {
     const rec = state.records.find(r => r.id === id)
     if (!rec) return
@@ -140,7 +133,6 @@ export function useStore() {
     submitRecord,
     approveRecord,
     rejectRecord,
-    withdrawRecord,
     resubmitRecord,
     deptList,
     staffList,

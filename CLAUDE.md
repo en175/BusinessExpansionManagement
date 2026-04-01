@@ -95,7 +95,7 @@
 ### 4.3 开拓对象数据结构
 
 单条活动记录可包含**多个开拓对象**（一对多），每个对象字段：
-- `name`（机构名称）、`taxId`（纳税人识别号，预留后续与案件关联）
+- `name`（机构名称）
 - `industry`（所属行业，12个选项）、`province` + `city`（省市级联）
 
 ### 4.4 查询与统计合并一页
@@ -118,6 +118,8 @@
 | 圆角 | `--radius-md: 10px`，`--radius-lg: 14px` |
 
 Element Plus 全局覆盖在 `base.css` 底部。按钮用自定义类（`.btn-primary`、`.btn-default`、`.btn-text`、`.btn-danger-text`），不直接用 EP 的 `el-button` 样式。
+
+**图标风格**：图标不限于 Element Plus 风格，可大胆使用其他组件库（如 Lucide、Phosphor、Tabler Icons 等）的图标，优先选择高级、大气、前卫的视觉风格。
 
 ---
 

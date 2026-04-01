@@ -93,14 +93,7 @@
             <el-icon><View /></el-icon> 查看详情
           </button>
           <button
-            v-if="rec.status === 'pending'"
-            class="btn-danger-text"
-            @click="confirmWithdraw(rec)"
-          >
-            <el-icon><RefreshLeft /></el-icon> 撤回
-          </button>
-          <button
-            v-if="rec.status === 'rejected' || rec.status === 'draft'"
+            v-if="rec.status === 'rejected'"
             class="btn-text"
             @click="editRecord(rec)"
           >
@@ -169,7 +162,6 @@
           <div v-for="t in detailRecord.targets" :key="t.name" class="detail-target">
             <div class="detail-target-name">{{ t.name }}</div>
             <div class="detail-target-meta">
-              <span v-if="t.taxId">税号：{{ t.taxId }}</span>
               <span>{{ t.industry }}</span>
               <span>{{ t.province }} {{ t.city }}</span>
             </div>
@@ -216,33 +208,22 @@
       </template>
     </el-drawer>
 
-    <!-- 撤回确认 -->
-    <el-dialog v-model="withdrawVisible" title="确认撤回" width="380px" align-center>
-      <p style="color:var(--text-regular)">确认撤回「{{ withdrawTarget?.title }}」？撤回后记录将变为草稿状态，可重新修改提交。</p>
-      <template #footer>
-        <el-button type="danger" @click="doWithdraw">确认撤回</el-button>
-        <el-button @click="withdrawVisible = false">取消</el-button>
-      </template>
-    </el-dialog>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import { useStore } from '@/stores/useStore.js'
-import { Plus, Calendar, Collection, OfficeBuilding, UserFilled, View, RefreshLeft, EditPen,
+import { Plus, Calendar, Collection, OfficeBuilding, UserFilled, View, EditPen,
          DocumentRemove, CircleCheckFilled, WarningFilled } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const { myRecords, withdrawRecord } = useStore()
+const { myRecords } = useStore()
 
 const activeTab = ref('all')
 const detailVisible = ref(false)
 const detailRecord = ref(null)
-const withdrawVisible = ref(false)
-const withdrawTarget = ref(null)
 
 const statusMap = {
   pending:  { label: '待审批', type: 'warning' },
@@ -275,17 +256,6 @@ const filteredRecords = computed(() =>
 function viewDetail(rec) {
   detailRecord.value = rec
   detailVisible.value = true
-}
-
-function confirmWithdraw(rec) {
-  withdrawTarget.value = rec
-  withdrawVisible.value = true
-}
-
-function doWithdraw() {
-  withdrawRecord(withdrawTarget.value.id)
-  withdrawVisible.value = false
-  ElMessage.success('已撤回，记录已变为草稿状态')
 }
 
 function editRecord(rec) {

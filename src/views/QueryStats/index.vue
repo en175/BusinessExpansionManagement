@@ -247,7 +247,6 @@
           <div v-for="t in detailRecord.targets" :key="t.name" class="detail-target">
             <div class="detail-target-name">{{ t.name }}</div>
             <div class="detail-target-meta">
-              <span v-if="t.taxId">税号：{{ t.taxId }}</span>
               <span>{{ t.industry }}</span>
               <span>{{ t.province }} {{ t.city }}</span>
             </div>
@@ -292,9 +291,6 @@
       <div class="export-info">
         <el-icon class="export-icon"><Download /></el-icon>
         <div>即将导出<strong v-if="selectedRows.length > 0">已选</strong><strong v-else>全部筛选</strong> <strong>{{ selectedRows.length > 0 ? selectedRows.length : filteredRecords.length }}</strong> 条记录的明细表</div>
-        <div style="font-size:12px;color:var(--text-sub);margin-top:4px">
-          包含字段：活动标题、填报人、部门、活动时间、活动形式、规模、牵头/配合部门、开拓对象、行业地区、我委/对方参与人员、活动目的、反馈建议、跟进事项、备注、状态等
-        </div>
       </div>
       <template #footer>
         <el-button type="primary" @click="doExport">确认导出</el-button>

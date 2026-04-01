@@ -139,7 +139,7 @@ export const mockRecords = [
       { name: '刘敏',   title: '广发证券股份有限公司 合规法务', contact: '' },
     ],
     targets: [
-      { name: '广发证券股份有限公司', taxId: '91440000733830765D', industry: '金融', province: '广东省', city: '广州市' },
+      { name: '广发证券股份有限公司', industry: '金融', province: '广东省', city: '广州市' },
     ],
     purpose: '了解广发证券法务部门对仲裁服务的需求，探讨商事仲裁合作可能性。对方表达了对金融类纠纷仲裁服务的浓厚兴趣，已就后续签订仲裁协议框架达成初步意向。',
     feedback: '对方认为广仲在金融类案件裁决专业性较强，希望进一步了解仲裁员资质及裁决周期。',
@@ -174,8 +174,8 @@ export const mockRecords = [
       { name: '陈海峰', title: '广州港集团 法务部长' },
     ],
     targets: [
-      { name: '中远海运集团有限公司',     taxId: '91310000600018253J', industry: '国际航运', province: '广东省', city: '广州市' },
-      { name: '招商局港口控股有限公司',   taxId: '91810000HK08251181', industry: '国际航运', province: '广东省', city: '深圳市' },
+      { name: '中远海运集团有限公司',     industry: '国际航运', province: '广东省', city: '广州市' },
+      { name: '招商局港口控股有限公司',   industry: '国际航运', province: '广东省', city: '深圳市' },
     ],
     purpose: '就国际航运数字化转型中的法律风险防控议题开展研讨，广仲作为联合主办方发表主旨演讲，扩大广仲在航运领域的品牌影响力，收集潜在案源线索。',
     feedback: '多家航运企业反映传统诉讼周期过长，对仲裁解决跨境纠纷表示认可，期望广仲提供更多定制化服务。',
@@ -208,7 +208,7 @@ export const mockRecords = [
       { name: '吴芳芳', title: '深圳前海合作区管理局 产业发展处', contact: '' },
     ],
     targets: [
-      { name: '深圳前海合作区管理局', taxId: '914403006721261858', industry: '数字经济', province: '广东省', city: '深圳市' },
+      { name: '深圳前海合作区管理局', industry: '数字经济', province: '广东省', city: '深圳市' },
     ],
     purpose: '洽谈在前海合作区设立广仲仲裁服务站事宜，以及共同推动粤港澳大湾区商事仲裁合作机制建设。',
     feedback: '对方对跨境商事仲裁业务有较强需求，初步表达合作意愿。',
@@ -241,7 +241,7 @@ export const mockRecords = [
       { name: '方静',   title: '华润集团有限公司 法务部高级经理', contact: '' },
     ],
     targets: [
-      { name: '华润集团有限公司', taxId: '91440300MA5DXXXXXXX', industry: '建设工程', province: '广东省', city: '深圳市' },
+      { name: '华润集团有限公司', industry: '建设工程', province: '广东省', city: '深圳市' },
     ],
     purpose: '走访华润集团法务部，介绍广仲在建设工程纠纷领域的专业仲裁优势，了解其存量纠纷情况及未来合作意向。',
     feedback: '华润集团法务部正面临一批存量工程类纠纷，对方对仲裁效率表示认可，但希望了解广仲仲裁员工程专业背景情况。',
@@ -274,8 +274,8 @@ export const mockRecords = [
       { name: '王磊',   title: '广东省低空经济产业协会 秘书长' },
     ],
     targets: [
-      { name: '广州亿航智能技术有限公司', taxId: '91440101MA5DXXXXXA', industry: '低空经济', province: '广东省', city: '广州市' },
-      { name: '广东省低空经济产业协会',   taxId: '91440100XXXXXXXXXB', industry: '低空经济', province: '广东省', city: '广州市' },
+      { name: '广州亿航智能技术有限公司', industry: '低空经济', province: '广东省', city: '广州市' },
+      { name: '广东省低空经济产业协会',   industry: '低空经济', province: '广东省', city: '广州市' },
     ],
     purpose: '面向低空经济企业宣讲广仲在新兴产业领域的仲裁服务优势及典型案例，扩大广仲在低空经济赛道的品牌覆盖，吸引行业头部企业签署广仲仲裁协议示范条款。',
     feedback: '多家企业对如何在合同中合理设置仲裁条款表示需要指导，建议广仲提供标准合同模板参考。',
@@ -308,9 +308,9 @@ export const mockRecords = [
       { name: '刘国祥', title: '深圳国际仲裁院 副秘书长' },
     ],
     targets: [
-      { name: '香港国际仲裁中心',           taxId: '',                    industry: '其他行业',   province: '香港特别行政区', city: '香港' },
-      { name: '澳门世界贸易中心仲裁中心',   taxId: '',                    industry: '其他行业',   province: '澳门特别行政区', city: '澳门' },
-      { name: '深圳国际仲裁院',             taxId: '91440300726826985Y',  industry: '数字经济',   province: '广东省', city: '深圳市' },
+      { name: '香港国际仲裁中心',           industry: '其他行业',   province: '香港特别行政区', city: '香港' },
+      { name: '澳门世界贸易中心仲裁中心',   industry: '其他行业',   province: '澳门特别行政区', city: '澳门' },
+      { name: '深圳国际仲裁院',             industry: '数字经济',   province: '广东省', city: '深圳市' },
     ],
     purpose: '赴港澳及深圳调研大湾区主要仲裁机构的合作机制建设情况，重点了解跨境商事仲裁的受案标准、裁决承认与执行机制，为广仲推进大湾区仲裁服务一体化提供参考依据。',
     feedback: '各机构均表达了加强区域协作的意愿，建议广仲牵头发起大湾区仲裁机构联席会议机制。',
@@ -344,7 +344,7 @@ export const mockRecords = [
       { name: '吴晓红', title: '广州互联网法院 研究室主任' },
     ],
     targets: [
-      { name: '广州互联网法院', taxId: '11440100MB1D6T4605', industry: '数字经济', province: '广东省', city: '广州市' },
+      { name: '广州互联网法院', industry: '数字经济', province: '广东省', city: '广州市' },
     ],
     purpose: '就诉讼与仲裁多元化纠纷解决机制协同问题开展交流，探讨互联网法院与广仲在数字经济纠纷领域建立"诉裁联动"工作机制的可行性。',
     feedback: '互联网法院对仲裁前置机制表示积极支持，建议广仲提供标准化的在线仲裁服务接入方案。',

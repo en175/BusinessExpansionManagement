@@ -109,7 +109,6 @@
           <div v-for="t in detailRecord.targets" :key="t.name" class="detail-target">
             <div class="detail-target-name">{{ t.name }}</div>
             <div class="detail-target-meta">
-              <span v-if="t.taxId">税号：{{ t.taxId }}</span>
               <span>{{ t.industry }}</span>
               <span>{{ t.province }} {{ t.city }}</span>
             </div>
